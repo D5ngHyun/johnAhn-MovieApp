@@ -5,14 +5,18 @@ import { Button } from 'antd';
 function Favorite({ movieInfo, movieId, userFrom }) {
   const [favoriteNumber, setFavoriteNumber] = useState(0);
   const [favorited, setFavorited] = useState(false);
-  const { backdrop_path: moviePost, title, runtime } = movieInfo;
+  const {
+    backdrop_path: moviePost,
+    title: movieTitle,
+    runtime: movieRunTime,
+  } = movieInfo;
 
   let variables = {
     userFrom,
     movieId,
     moviePost,
-    title,
-    runtime,
+    movieTitle,
+    movieRunTime,
   };
 
   const onClickFavorite = () => {
@@ -26,8 +30,9 @@ function Favorite({ movieInfo, movieId, userFrom }) {
         }
       });
     } else {
-      axios.post('/api/favorite/addToFavorite').then((res) => {
+      axios.post('/api/favorite/addToFavorite', variables).then((res) => {
         if (res.data.success) {
+          console.log(res.data);
           setFavoriteNumber((prev) => prev + 1);
           setFavorited(!favorited);
         } else {
